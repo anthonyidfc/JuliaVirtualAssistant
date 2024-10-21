@@ -426,9 +426,9 @@ def get_event_date_time(detail):        # Función para obtener la fecha y hora 
 
 ### Spotify ###################################################################################################
 
-SPOTIPY_CLIENT_ID = '75899db816b24683bc01a35b3f3006ca'      # Credenciales de autenticación para la API de Spotify.
-SPOTIPY_CLIENT_SECRET = '83052e7407a34291b98ae861a5dd09c6'
-SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
+SPOTIPY_CLIENT_ID = ''      # Credenciales de autenticación para la API de Spotify.
+SPOTIPY_CLIENT_SECRET = ''
+SPOTIPY_REDIRECT_URI = ''
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,         # Inicializa el cliente de Spotify con las credenciales y los permisos necesarios.
                                                client_secret=SPOTIPY_CLIENT_SECRET,
