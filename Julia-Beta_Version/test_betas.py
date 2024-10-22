@@ -323,22 +323,35 @@ def obtener_clima(ciudad):          # Función para obtener el clima de una ciud
 SCOPES = ['https://www.googleapis.com/auth/calendar']       # Alcance de permisos para acceder al calendario de Google.
 
 def google_calendar_auth():         # Función para autenticar el acceso a Google Calendar.
-    creds = None        # Inicializa las credenciales como None.
-    
-    if os.path.exists('tokens/token_c.json'):       # Verifica si el archivo de tokens existe para cargar las credenciales.
-        creds = Credentials.from_authorized_user_file('tokens/token_c.json', SCOPES)        # Carga las credenciales desde el archivo.
-
-    if not creds or not creds.valid:        # Si no hay credenciales válidas, genera nuevas credenciales.
-        if creds and creds.expired and creds.refresh_token:         # Si las credenciales han expirado y hay un token de actualización.
-            creds.refresh(Request())        # Actualiza las credenciales.
+    creds = None            # Inicializa las credenciales como None.
+    if os.path.exists('tokens/token_c.json'):
+        try:
+            creds = Credentials.from_authorized_user_file('tokens/token_c.json', SCOPES)
+        except Exception as e:
+            print(f"Error cargando el token: {e}. Se eliminará el token para generar uno nuevo.")
+            os.remove('tokens/token_c.json')
+            
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            try:
+                creds.refresh(Request())                                             # Intenta refrescar el token
+            except Exception as e:
+                print(f"Error refrescando el token: {e}. El token será eliminado.")
+                talk(f"Error refrescando el token: {e}. El token será eliminado.")
+                os.remove('tokens/token_c.json')                                     # Elimina el token si no se puede refrescar
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials/credentials_calendar.json', SCOPES)       # Configura el flujo de autorización y obtiene nuevas credenciales.
-            creds = flow.run_local_server(port=0)       # Inicia un servidor local para obtener el código de autorización.
-        
-        with open('tokens/token_c.json', 'w') as token:         # Guarda las nuevas credenciales en un archivo para su uso futuro.
-            token.write(creds.to_json())
-    
+            try:
+                flow = InstalledAppFlow.from_client_secrets_file('credentials/credentials_calendar.json', SCOPES)  # Si no se puede refrescar, inicia el flujo de autenticación desde cero
+                creds = flow.run_local_server(port=0)
+                with open('tokens/token_c.json', 'w') as token:                 # Guarda las nuevas credenciales
+                    token.write(creds.to_json())
+            except Exception as e:
+                print(f"Error en la autenticación: {e}")
+                talk(f"Error en la autenticación: {e}")
+                return None
+
     return build('calendar', 'v3', credentials=creds)       # Devuelve el servicio de Google Calendar autenticado.
+       # Devuelve el servicio de Google Calendar autenticado.
 
 def create_event(summary, location, description, start_time, end_time):  # Función para crear un evento en Google Calendar.
     service = google_calendar_auth()  # Autenticación para acceder al calendario.
@@ -426,9 +439,9 @@ def get_event_date_time(detail):        # Función para obtener la fecha y hora 
 
 ### Spotify ###################################################################################################
 
-SPOTIPY_CLIENT_ID = ''      # Credenciales de autenticación para la API de Spotify.
-SPOTIPY_CLIENT_SECRET = ''
-SPOTIPY_REDIRECT_URI = ''
+SPOTIPY_CLIENT_ID = '75899db816b24683bc01a35b3f3006ca'      # Credenciales de autenticación para la API de Spotify.
+SPOTIPY_CLIENT_SECRET = '83052e7407a34291b98ae861a5dd09c6'
+SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,         # Inicializa el cliente de Spotify con las credenciales y los permisos necesarios.
                                                client_secret=SPOTIPY_CLIENT_SECRET,
@@ -623,8 +636,13 @@ SCOPES_GMAIL = ['https://www.googleapis.com/auth/gmail.send']                   
 
 def gmail_authenticate():                                                                   # Función para autenticar y obtener credenciales para acceder a la API de Gmail.
     creds = None
-    if os.path.exists('tokens/token_g.json'):                                               # Verifica si existe un archivo de token previamente guardado.
-        creds = Credentials.from_authorized_user_file('tokens/token_g.json', SCOPES_GMAIL)
+    if os.path.exists('tokens/token_g.json'):
+        try:
+            creds = Credentials.from_authorized_user_file('tokens/token_g.json', SCOPES_GMAIL)
+        except Exception as e:
+            print(f"Error cargando el token: {e}. Se eliminará el token para generar uno nuevo.")
+            os.remove('tokens/token_g.json')
+            
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             try:
