@@ -296,7 +296,7 @@ def open_program_by_shortcut(nombre_programa):          # Función para abrir un
 
 ### Clima #####################################################################################################
 
-API_KEY = "9ad6f112d1bc4349bbd21303240910"          # Clave de API para autenticar las solicitudes a la API del clima.
+API_KEY = "YOUR_API_KEY"          # Clave de API para autenticar las solicitudes a la API del clima.
 BASE_URL = "http://api.weatherapi.com/v1/current.json?"         # URL base de la API para obtener el clima actual.
 
 def obtener_clima(ciudad):          # Función para obtener el clima de una ciudad específica.
@@ -569,13 +569,6 @@ def reproducir_lista_reproduccion(nombre_lista):        # Función para reproduc
             talk(f"No se encontró la lista de reproducción '{nombre_lista}'.")          # Mensaje si no se encuentra la lista.
     except Exception as e:          # Maneja errores.
         print(f"Error al reproducir la lista de reproducción: {e}")         # Imprime el error en consola.
-
-def detener_reproduccion():         # Función para detener la música.
-    try:
-        sp.pause_playback()         # Pausa la reproducción.
-        talk("Deteniendo la música.")       # Mensaje al usuario.
-    except Exception as e:          # Maneja errores.
-        print(f"Error al detener la música: {e}")       # Imprime el error en consola.
 
 def reanudar_cancion():         # Función para reanudar la música pausada.
     try:
