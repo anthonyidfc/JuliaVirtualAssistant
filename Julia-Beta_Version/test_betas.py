@@ -296,7 +296,7 @@ def open_program_by_shortcut(nombre_programa):          # Función para abrir un
 
 ### Clima #####################################################################################################
 
-API_KEY = "9ad6f112d1bc4349bbd21303240910"          # Clave de API para autenticar las solicitudes a la API del clima.
+API_KEY = "YOUR_API_KEY"          # Clave de API para autenticar las solicitudes a la API del clima.
 BASE_URL = "http://api.weatherapi.com/v1/current.json?"         # URL base de la API para obtener el clima actual.
 
 def obtener_clima(ciudad):          # Función para obtener el clima de una ciudad específica.
@@ -439,8 +439,8 @@ def get_event_date_time(detail):        # Función para obtener la fecha y hora 
 
 ### Spotify ###################################################################################################
 
-SPOTIPY_CLIENT_ID = '75899db816b24683bc01a35b3f3006ca'      # Credenciales de autenticación para la API de Spotify.
-SPOTIPY_CLIENT_SECRET = '83052e7407a34291b98ae861a5dd09c6'
+SPOTIPY_CLIENT_ID = 'YOUR_CLIENT_ID'      # Credenciales de autenticación para la API de Spotify.
+SPOTIPY_CLIENT_SECRET = 'YOUR_CLIENT_SECRET'
 SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,         # Inicializa el cliente de Spotify con las credenciales y los permisos necesarios.
