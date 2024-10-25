@@ -96,18 +96,18 @@ def show_functions_window():                            # Crea y muestra una ven
     custom_font = load_font(font_path, font_size)       # Carga la fuente personalizada.
 
     functions_list = [          # Lista de funciones disponibles con sus respectivos iconos.
-        ("Reproducir canción", 'icons/1.png'),
-        ("Captura de pantalla", 'icons/2.png'),
-        ("Consultar información en Wikipedia", 'icons/3.png'),
-        ("Abrir programas", 'icons/4.png'),
-        ("Buscar en Google", 'icons/5.png'),
-        ("Buscar en Google Maps", 'icons/6.png'),
-        ("Operaciones matemáticas", 'icons/7.png'),
-        ("Consultar clima", 'icons/8.png'),
-        ("Reproducir en Spotify", 'icons/9.png'),
-        ("Agendar evento", 'icons/10.png'),
-        ("Enviar correo", 'icons/11.png'),
-        ("Traducir texto", 'icons/12.png')
+        ("Reproducir canción \n Comaando: 'Julia, reproducir...'", 'icons/1.png'),
+        ("Captura de pantalla \n Comaando: 'Julia, captura de pantalla'", 'icons/2.png'),
+        ("Consultar en Wikipedia \n Comaando: 'Julia, consulta wikipedia...'", 'icons/3.png'),
+        ("Abrir programas \n Comaando: 'Julia, abre...'", 'icons/4.png'),
+        ("Buscar en Google \n Comaando: 'Julia, busca...'", 'icons/5.png'),
+        ("Buscar en Google Maps \n Comaando: 'Julia, en el mapa...'", 'icons/6.png'),
+        ("Operaciones matemáticas \n Comaando: 'Julia, cuánto es...'", 'icons/7.png'),
+        ("Consultar clima \n Comaando: 'Julia, clima en...'", 'icons/8.png'),
+        ("Reproducir en Spotify \n Comaando: 'Julia, reproduce en Spotify'", 'icons/9.png'),
+        ("Agendar evento \n Comaando: 'Julia, agendar evento'", 'icons/10.png'),
+        ("Enviar correo \n Comaando: 'Julia, enviar correo'", 'icons/11.png'),
+        ("Traducir texto \n Comaando: 'Julia, traduce...'", 'icons/12.png')
     ]
 
     for func_name, icon_path in functions_list:             # Itera sobre la lista de funciones para crear los elementos visuales.
@@ -253,7 +253,7 @@ def listen():       # Función para escuchar y procesar la entrada de voz del us
 
 def listen_in_thread():         # Función para iniciar la escucha en un hilo separado.
     thread = threading.Thread(target=listen)        # Crea un nuevo hilo que ejecutará la función listen.
-    thread.start()          # Inicia el hilo, permitiendo que la función listen se ejecute en paralelo.
+    thread.start()        # Inicia el hilo, permitiendo que la función listen se ejecute en paralelo.
 ####################################################################################################################################################################################
 
 ### Hablador ##################################################################################################
@@ -296,7 +296,7 @@ def open_program_by_shortcut(nombre_programa):          # Función para abrir un
 
 ### Clima #####################################################################################################
 
-API_KEY = "YOUR_API_KEY"          # Clave de API para autenticar las solicitudes a la API del clima.
+API_KEY = "9ad6f112d1bc4349bbd21303240910"          # Clave de API para autenticar las solicitudes a la API del clima.
 BASE_URL = "http://api.weatherapi.com/v1/current.json?"         # URL base de la API para obtener el clima actual.
 
 def obtener_clima(ciudad):          # Función para obtener el clima de una ciudad específica.
@@ -308,7 +308,7 @@ def obtener_clima(ciudad):          # Función para obtener el clima de una ciud
         if "error" not in data:         # Verifica si hay algún error en la respuesta de la API.
             temp_celsius = data['current']['temp_c']        # Obtiene la temperatura en grados Celsius.
             condition = data['current']['condition']['text']        # Obtiene la condición climática (por ejemplo, "soleado").
-            clima_texto = f"El clima en {ciudad} es de {temp_celsius} grados Celsius con {condition}."      # Crea un mensaje de texto sobre el clima actual en la ciudad especificada.
+            clima_texto = f"El clima {ciudad} es de {temp_celsius} grados Celsius con {condition}."      # Crea un mensaje de texto sobre el clima actual en la ciudad especificada.
             talk(clima_texto)       # Llama a la función talk para reproducir el mensaje en voz alta.
             write_func(clima_texto)         # Llama a write_func para mostrar el mensaje en la interfaz.
         else:
@@ -439,8 +439,8 @@ def get_event_date_time(detail):        # Función para obtener la fecha y hora 
 
 ### Spotify ###################################################################################################
 
-SPOTIPY_CLIENT_ID = 'YOUR_CLIENT_ID'      # Credenciales de autenticación para la API de Spotify.
-SPOTIPY_CLIENT_SECRET = 'YOUR_CLIENT_SECRET'
+SPOTIPY_CLIENT_ID = '75899db816b24683bc01a35b3f3006ca'      # Credenciales de autenticación para la API de Spotify.
+SPOTIPY_CLIENT_SECRET = '83052e7407a34291b98ae861a5dd09c6'
 SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,         # Inicializa el cliente de Spotify con las credenciales y los permisos necesarios.
@@ -511,45 +511,46 @@ def crear_lista_reproduccion(nombre_lista):         # Función para crear una nu
     except Exception as e:  # Maneja errores.
         print(f"Error al crear la lista de reproducción: {e}")          # Imprime el error en consola.
 
-def agregar_canciones_a_lista(nombre_lista, canciones=None):        # Función para agregar canciones a una lista de reproducción.
+def agregar_canciones_a_lista(nombre_lista, canciones=None):  # Función para agregar canciones a una lista de reproducción.
     try:
-        user_id = sp.current_user()['id']       # Obtiene el ID del usuario.
-        playlists = sp.user_playlists(user_id)          # Obtiene las listas de reproducción del usuario.
-        playlist_id = None          # Inicializa el ID de la lista de reproducción.
-        
-        for playlist in playlists['items']:         # Busca la lista de reproducción por su nombre.
+        user_id = sp.current_user()['id']  # Obtiene el ID del usuario.
+        playlists = sp.user_playlists(user_id)  # Obtiene las listas de reproducción del usuario.
+        playlist_id = None  # Inicializa el ID de la lista de reproducción.
+
+        for playlist in playlists['items']:  # Busca la lista de reproducción por su nombre.
             if playlist['name'].lower() == nombre_lista.lower():
-                playlist_id = playlist['id']        # Guarda el ID de la lista encontrada.
+                playlist_id = playlist['id']  # Guarda el ID de la lista encontrada.
                 break
-        
-        if playlist_id is not None:         # Verifica si se encontró la lista de reproducción.
-            track_uris = []         # Inicializa una lista para las URIs de las canciones.
-            if canciones is None:       # Si no se proporcionan canciones.
-                current_track = sp.current_playback()       # Obtiene la canción actual.
-                if current_track and current_track['is_playing']:       # Verifica si hay una canción reproduciéndose.
-                    track_uris.append(current_track['item']['uri'])         # Agrega la URI de la canción actual.
-                    talk(f"Agregando la canción en reproducción: {current_track['item']['name']} de {current_track['item']['artists'][0]['name']} a la lista {nombre_lista}.")          # Mensaje al usuario.
+
+        if playlist_id is not None:  # Verifica si se encontró la lista de reproducción.
+            track_uris = []  # Inicializa una lista para las URIs de las canciones.
+            if canciones is None:  # Si no se proporcionan canciones.
+                current_track = sp.current_playback()  # Obtiene la canción actual.
+                # Verifica si hay una canción reproduciéndose y que la estructura sea la esperada.
+                if current_track and 'item' in current_track and current_track['is_playing']:
+                    track_uris.append(current_track['item']['uri'])  # Agrega la URI de la canción actual.
+                    talk(f"Agregando la canción en reproducción: {current_track['item']['name']} de {current_track['item']['artists'][0]['name']} a la lista {nombre_lista}.")  # Mensaje al usuario.
                 else:
-                    talk("No se está reproduciendo ninguna canción. Por favor, proporciona el nombre de una canción.")          # Mensaje si no hay música.
+                    talk("No se está reproduciendo ninguna canción. Por favor, proporciona el nombre de una canción.")  # Mensaje si no hay música.
                     return
             else:
-                for cancion in canciones:       # Busca cada canción proporcionada y agrega sus URIs a la lista.
-                    resultados = sp.search(q=cancion, type='track', limit=1)        # Busca la canción.
-                    if resultados['tracks']['items']:       # Verifica si se encontró la canción.
-                        track_uris.append(resultados['tracks']['items'][0]['uri'])          # Agrega la URI de la canción encontrada.
+                for cancion in canciones:  # Busca cada canción proporcionada y agrega sus URIs a la lista.
+                    resultados = sp.search(q=cancion, type='track', limit=1)  # Busca la canción.
+                    if resultados['tracks']['items']:  # Verifica si se encontró la canción.
+                        track_uris.append(resultados['tracks']['items'][0]['uri'])  # Agrega la URI de la canción encontrada.
                     else:
-                        talk(f"No encontré la canción {cancion}.")          # Mensaje si no se encuentra la canción.
-        
-            if track_uris:          # Agrega las canciones a la lista de reproducción.
-                sp.user_playlist_add_tracks(user_id, playlist_id, track_uris)       # Agrega las URIs de las canciones a la lista.
-                talk(f"Canciones agregadas a la lista de reproducción '{nombre_lista}'.")       # Mensaje al usuario.
+                        talk(f"No encontré la canción {cancion}.")  # Mensaje si no se encuentra la canción.
+
+            if track_uris:  # Agrega las canciones a la lista de reproducción.
+                sp.user_playlist_add_tracks(user_id, playlist_id, track_uris)  # Agrega las URIs de las canciones a la lista.
+                talk(f"Canciones agregadas a la lista de reproducción '{nombre_lista}'.")  # Mensaje al usuario.
             else:
-                talk("No se encontraron canciones para agregar.")       # Mensaje si no hay canciones para agregar.
+                talk("No se encontraron canciones para agregar.")  # Mensaje si no hay canciones para agregar.
         else:
-            talk(f"No se encontró la lista de reproducción '{nombre_lista}'.")          # Mensaje si no se encuentra la lista.
-    except Exception as e:          # Maneja errores.
-        print(f"Error al agregar canciones a la lista de reproducción: {e}")        # Imprime el error en consola.
-        talk("Hubo un problema al agregar las canciones.")          # Mensaje al usuario sobre el error.
+            talk(f"No se encontró la lista de reproducción '{nombre_lista}'.")  # Mensaje si no se encuentra la lista.
+    except Exception as e:  # Maneja errores.
+        print(f"Error al agregar canciones a la lista de reproducción: {e}")  # Imprime el error en consola.
+        talk("Hubo un problema al agregar las canciones.")  # Mensaje al usuario sobre el error.
 
 def reproducir_lista_reproduccion(nombre_lista):        # Función para reproducir una lista de reproducción.
     try:
@@ -776,14 +777,14 @@ def run_assistant(rec):
         nombre_lista = rec.replace('crear lista de reproducción', '').strip()
         crear_lista_reproduccion(nombre_lista)
 
-    elif 'agregar canciones a la lista' in rec:
-        partes = rec.replace('agregar canciones a la lista', '').strip().split('y')
+    elif 'agrega a la lista' in rec:
+        partes = rec.replace('agrega a la lista', '').strip().split('y')
         nombre_lista = partes[0].strip()
-        canciones = [cancion.strip() for cancion in partes[1:]]
+        if len(partes) > 1:
+            canciones = [cancion.strip() for cancion in partes[1:]]
+        else:
+            canciones = None
         agregar_canciones_a_lista(nombre_lista, canciones)
-
-    elif 'detener la música' in rec:
-        detener_reproduccion()
         
     elif 'agendar evento' in rec:
         summary = get_event_detail('título')
@@ -829,7 +830,7 @@ def run_assistant(rec):
         talk("Vuelve a intentarlo, no reconozco: " + rec)
     return rec
 
-load_user_name()
+#load_user_name()
 main_w.update()
 ####################################################################################################################################################################################
 
